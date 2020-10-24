@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <!-- game played directly in console -->
+        <!-- rock paper scissors with the computer -->
+    </head>
+
+    <body>
+        <div id="buttons">
+            <button class="choices" id="rock" type="button">rock</button>
+            <button class="choices" id="paper" type="button">paper</button>
+            <button class="choices" id="scissors" type="button">scissors</button>
+        </div>
+
+        <p id="result">Hello</p>
+
+        <div id="history">
+            <p>Rounds Played</p>
+
+        </div>        
+    
+    </body>
+        
+    <script>
+        //select for EventTarget
+        let playerRock = document.getElementById("rock");
+        let playerPaper = document.getElementById("paper");
+        let playerScissors = document.getElementById("scissors");
+        let playerScore=0, computerScore=0, ties = 0
+
+        function getPlayerChoice(e) {
+            let id = e.target.id.toString(); //get id of button and convert from object to string
+            let computerChoice = computerPlay();
+            if (typeof id !== 'string') {return;} //if mouse click not on a button, stop functione entirely
+
+            console.log("Player: "+ id, " Computer: " + computerChoice);
+
+            playRound(id, computerChoice);
+        }
+            
+        //randomly choose computer's hand
+        function computerPlay() {
+            let choices = ["rock", "paper", "scissors"];
+            // select one of the choices above with the method below
+            let randChoice = choices[Math.floor(Math.random() * choices.length)];
+            return randChoice;
+        }
+
+        function playRound(id, computerChoice) {
+            let playerChoice;
+            if (id == "rock") {
+                playerChoice = "rock";
+            } else if (id == "paper") {
+                playerChoice = "paper";
+            } else {
+                playerChoice = "scissors";
+            }
+
+            if (playerChoice=="rock" && computerChoice=="scissors") {
+                winner = "player";
+            } else if (playerChoice=="rock" && computerChoice=="paper") {
+                winner = "computer";
+
+            } else if (playerChoice=="paper" && computerChoice=="rock") {
+                winner = "player";
+            } else if (playerChoice=="paper" && computerChoice=="scissors") {
+                winner = "computer";
+
+            } else if (playerChoice=="scissors" && computerChoice=="paper") {
+                winner = "player";
+            } else if (playerChoice=="scissors" && computerChoice=="rock") {
+                winner = "computer";
+
+            } else if (playerChoice==computerChoice) {
+                winner = "tie";
+            }
+            return result(winner, computerChoice, playerChoice);
+        }
+        //show winner in p tag html
+        function result(winner, computerChoice, playerChoice) {
+            let score = keepScore(winner); //returns player score, computer score, ties
+            
+            let result = document.getElementById("result");
+            let eachRound = document.createElement("p"); //create p tag every round
+            let history = document.getElementById("history"); 
+            let completeRound = document.createElement("p"); //this creates log for each turn played
+            eachRound.innerText = ("winner: " + winner + " computer chose:" + computerChoice + 
+                                " player chose: " + playerChoice); //display in created p tag
+            completeRound.innerText = score;
+            result.appendChild(eachRound);
+            history.appendChild(completeRound);
+        } 
+
+        function keepScore(winner) { //keep track of score, number of turns per round not defined
+            if (winner == "player") {
+                playerScore++;
+            } else if (winner == "computer") {
+                computerScore++;
+            } else {
+                ties++;
+            }
+            return ("Player wins: " + playerScore +
+                    " Computer wins: " + computerScore +
+                    "number of ties" + ties); 
+        }
+
+        let but = document.querySelectorAll("button");
+        // iterate through nodelist and addEventListener to each button (3)
+        but.forEach(id => id.addEventListener('click', getPlayerChoice)); 
+    
+    </script>
+
+</html>
